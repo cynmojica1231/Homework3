@@ -2,7 +2,7 @@
 var numbers = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"];
 
 // create an array of lowercase
-var lowercase = [
+var lowerCase = [
   "a",
   "b",
   "c",
@@ -32,7 +32,7 @@ var lowercase = [
 ];
 
 // create an array of uppercase
-[
+var upperCase = [
   "A",
   "B",
   "C",
@@ -62,14 +62,12 @@ var lowercase = [
 ];
 
 // create special character
-["+", "-", "&", "!", "@", "*", "?"];
+var specialCharacters = ["+", "-", "&", "!", "@", "*", "?"];
 
 function generatePassword() {
-  generatePasswordoptions();
-}
-
-function generatePasswordoptions() {
-  let userStop = prompt("Enter Password Length");
+  let userStop = prompt(
+    "How many characters would you like your password to contain?"
+  );
   if (userStop < 8) {
     alert("Password length must be 8 characters");
     return;
@@ -78,29 +76,69 @@ function generatePasswordoptions() {
     alert("Password length cannot be greater than 128");
     return;
   }
-  var hasnumbers = confirm("click ok if you want to have numbers");
-  var haslowercase = confirm("click ok if you want to have lowercase letters");
-  var hasuppercase = confirm("click ok if you want to have uppercase letters");
-  var hasspecialcharacters = confirm(
+  var hasnumbers = confirm("Click ok if you want to have numbers");
+  var haslowerCase = confirm("Click ok if you want to have lowercase letters");
+  var hasupperCase = confirm("Click ok if you want to have uppercase letters");
+  var hasspecialCharacters = confirm(
     "click ok if you want to have special characters"
   );
   if (
     hasnumbers === false &&
-    haslowercase === false &&
-    hasuppercase === false &&
-    hasspecialcharacters === false
-  ) {
+    haslowerCase === false &&
+    hasupperCase === false &&
+    hasspecialCharacters === false
+  );
+  {
     alert("User must select one character type");
-    return;
+    return generatePassword();
   }
+
   var Passwordoptions = {
     length: userStop,
     hasnumbers: hasnumbers,
-    haslowercase: haslowercase,
-    hasuppercase: hasuppercase,
-    hasspecialcharacters: hasspecialcharacters,
+    haslowerCase: haslowerCase,
+    hasupperCase: hasupperCase,
+    hasspecialCharacters: hasspecialCharacters,
   };
+  return Passwordoptions;
 }
+function generateRandom(arr) {
+  var randIndex = Math.floor(Math.random() * arr.length);
+  var randElement = arr[randIndex];
+  return randElement;
+}
+
+function generatePassword() {
+  var options = generatePassword();
+  var result = [];
+  var possibleCharacters = [];
+  var definiteCharacters = [];
+  if (options.hasspecialCharacters) {
+    possibleCharacters.concat(specialCharacters);
+    definiteCharacters.push(generateRandom(specialCharacters));
+  }
+  if (options.haslowerCase) {
+    possibleCharacters.concat(lowerCase);
+    definiteCharacters.push(generateRandom(lowerCase));
+  }
+  if (options.hasupperCase) {
+    possibleCharacters.concat(upperCase);
+    definiteCharacters.push(generateRandom(upperCase));
+  }
+
+  if (options.hasnumbers) {
+    possibleCharacters.concat(numbers);
+    definiteCharacters.push(generateRandom(numbers));
+  }
+  for (var i = 0; i < options.length; i++) {
+    var possibleCharacters = generateRandom(possibleCharacters);
+    result.push(possibleCharacters);
+  }
+  for (var i = 0; i < definitecharacters.length; i++) {
+    result[i] = definiteCharacters[i];
+    return result.join("");
+  }
+
 
 // Assignment Code
 var generateBtn = document.querySelector("#generate");
@@ -109,8 +147,11 @@ var generateBtn = document.querySelector("#generate");
 function writePassword() {
   var password = generatePassword();
   var passwordText = document.querySelector("#password");
+  console.log("Password: " + password);
 
   passwordText.value = password;
+
 }
+
 // Add event listener to generate button
 generateBtn.addEventListener("click", writePassword);
